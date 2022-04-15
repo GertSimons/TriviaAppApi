@@ -37,7 +37,7 @@ class QuestionMapperTest {
     public void test_should_return_correct_dto() {
         //Given
         //When
-        final QuestionResponseDTO questionResponseDTO = questionMapper.toQuestionResponseDTO(this.questionResponse);
+        final QuestionResponseDTO questionResponseDTO = questionMapper.toQuestionResponseDTO(this.questionResponse, "token");
         //Then
         assertTrue(questionResponseDTO.getResults().get(0).getAnswers().contains("only god knows"));
         assertTrue(questionResponseDTO.getResults().get(0).getAnswers().contains("1"));

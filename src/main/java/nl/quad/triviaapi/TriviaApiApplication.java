@@ -29,7 +29,7 @@ public class TriviaApiApplication {
         SpringApplication.run(TriviaApiApplication.class, args);
     }
 
-    @Scheduled(fixedDelay = 1000 * 60)
+    @Scheduled(fixedDelay = 1000 * 60 * 10)
     public void updateCache() throws TriviaApiException {
         if (cacheManager.getCacheNames().contains(QUESTIONS)) {
             cacheManager.getCache(QUESTIONS).put(QUESTIONS, triviaApiService.getAllQuestions());

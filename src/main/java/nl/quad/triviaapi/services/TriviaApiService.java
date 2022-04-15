@@ -29,10 +29,6 @@ public class TriviaApiService {
 
     public QuestionResponse getQuestions(int number, String token) throws TriviaApiException {
         try {
-            if (token == null || token.isEmpty()) {
-                token = getApiToken().getToken();
-            }
-
             Request request = new Request.Builder()
                     .url(BASE_URL + "api.php?amount=" + number + "&token=" + token)
                     .get()
@@ -73,7 +69,7 @@ public class TriviaApiService {
         return allQuestions;
     }
 
-    private TokenResponse getApiToken() throws TriviaApiException {
+    TokenResponse getApiToken() throws TriviaApiException {
         try {
             Request request = new Request.Builder()
                     .url(BASE_URL + API_TOKEN_REQUEST)

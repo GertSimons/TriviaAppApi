@@ -22,6 +22,7 @@ public class QuestionController {
     }
 
     @GetMapping("/questions")
+    @CrossOrigin(origins = "http://localhost:3000")
     public QuestionResponseDTO getQuestions(@RequestParam(value = "quantity", defaultValue = "5") int numberOfQuestions,
                                             @RequestParam(value = "token") String token) {
         try {
@@ -32,10 +33,11 @@ public class QuestionController {
         return null;
     }
 
-    @PostMapping("/checkanswer")
+    @PostMapping(value = "/checkanswer", consumes = "application/json")
+    @CrossOrigin(origins = "http://localhost:3000")
     public CheckAnswerResponseDTO checkAnswer(@RequestBody CheckAnswerRequestBody requestBody) {
         try {
-            return new CheckAnswerResponseDTO(questionService.findQuestionMatch(requestBody));
+            return questionService.findQuestionMatch(requestBody);
         } catch (TriviaApiException e) {
             log.error("failed to check answer {}", e.getResponseCode());
         }

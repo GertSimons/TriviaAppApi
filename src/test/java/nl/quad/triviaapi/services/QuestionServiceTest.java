@@ -3,19 +3,14 @@ package nl.quad.triviaapi.services;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import nl.quad.triviaapi.data.CheckAnswerRequestBody;
 import nl.quad.triviaapi.data.QuestionItem;
-import nl.quad.triviaapi.data.QuestionResponse;
-import nl.quad.triviaapi.data.dto.QuestionResponseDTO;
 import nl.quad.triviaapi.exceptions.TriviaApiException;
 import nl.quad.triviaapi.mappers.QuestionMapper;
 
@@ -40,6 +35,7 @@ class QuestionServiceTest {
         assertNotNull(questionMapper);
         assertNotNull(triviaApiService);
     }
+
     @Test
     public void test_find_question_correct_match_returns_true() throws TriviaApiException {
         //Given
@@ -51,7 +47,7 @@ class QuestionServiceTest {
         CheckAnswerRequestBody requestBody = new CheckAnswerRequestBody("question", "answer");
         when(triviaApiService.getAllQuestions()).thenReturn(questionItems);
         //When
-        final boolean questionMatch = questionService.findQuestionMatch(requestBody);
+        final boolean questionMatch = questionService.findQuestionMatch(requestBody).isCorrect();
         //Then
         assertTrue(questionMatch);
     }
@@ -67,7 +63,7 @@ class QuestionServiceTest {
         CheckAnswerRequestBody requestBody = new CheckAnswerRequestBody("question", "wronganswer");
         when(triviaApiService.getAllQuestions()).thenReturn(questionItems);
         //When
-        final boolean questionMatch = questionService.findQuestionMatch(requestBody);
+        final boolean questionMatch = questionService.findQuestionMatch(requestBody).isCorrect();
         //Then
         assertFalse(questionMatch);
     }

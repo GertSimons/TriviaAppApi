@@ -8,5 +8,6 @@ import lombok.Data;
 @Data
 @Builder
 public class QuestionResponseDTO {
+    private String token;
     private List<QuestionItemDTO> results;
 }

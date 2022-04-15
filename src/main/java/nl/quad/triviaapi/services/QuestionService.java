@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import nl.quad.triviaapi.data.CheckAnswerRequestBody;
 import nl.quad.triviaapi.data.QuestionItem;
 import nl.quad.triviaapi.data.QuestionResponse;
+import nl.quad.triviaapi.data.dto.CheckAnswerResponseDTO;
 import nl.quad.triviaapi.data.dto.QuestionResponseDTO;
 import nl.quad.triviaapi.exceptions.TriviaApiException;
 import nl.quad.triviaapi.mappers.QuestionMapper;
@@ -23,21 +24,29 @@ public class QuestionService {
     }
 
     public QuestionResponseDTO getQuestions(int number, String token) throws TriviaApiException {
+        if (token == null || token.isEmpty()) {
+            token = triviaService.getApiToken().getToken();
+        }
+
         final QuestionResponse questions = triviaService.getQuestions(number, token);
-        return questionMapper.toQuestionResponseDTO(questions);
+        return questionMapper.toQuestionResponseDTO(questions, token);
     }
 
-    public boolean findQuestionMatch(CheckAnswerRequestBody question) throws TriviaApiException {
+    public CheckAnswerResponseDTO findQuestionMatch(CheckAnswerRequestBody question) throws TriviaApiException {
         final List<QuestionItem> allQuestions = triviaService.getAllQuestions();
         return findQuestionMatch(question, allQuestions);
     }
 
-    private boolean findQuestionMatch(CheckAnswerRequestBody requestBody, List<QuestionItem> allQuestions) throws TriviaApiException {
+    private CheckAnswerResponseDTO findQuestionMatch(CheckAnswerRequestBody requestBody, List<QuestionItem> allQuestions) throws TriviaApiException {
         final Optional<QuestionItem> questionMatchOptional = allQuestions.stream().filter(q -> q.getQuestion().equals(requestBody.getQuestion())).findAny();
         if (!questionMatchOptional.isPresent()) {
             throw new TriviaApiException(404);
         } else {
-            return questionMatchOptional.get().getCorrectAnswer().equals(requestBody.getAnswer());
+            return CheckAnswerResponseDTO.builder()
+                    .correctAnswer(questionMatchOptional.get().getCorrectAnswer())
+                    .inCorrectAnswers(questionMatchOptional.get().getIncorrectAnswers())
+                    .isCorrect(questionMatchOptional.get().getCorrectAnswer().equals(requestBody.getAnswer()))
+                    .build();
         }
     }
 }

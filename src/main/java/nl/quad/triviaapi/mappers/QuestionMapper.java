@@ -6,21 +6,21 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import nl.quad.triviaapi.data.dto.QuestionItemDTO;
 import nl.quad.triviaapi.data.QuestionItem;
 import nl.quad.triviaapi.data.QuestionResponse;
+import nl.quad.triviaapi.data.dto.QuestionItemDTO;
 import nl.quad.triviaapi.data.dto.QuestionResponseDTO;
 
 @Service
 public class QuestionMapper {
-    public QuestionResponseDTO toQuestionResponseDTO(QuestionResponse questionResponse) {
+    public QuestionResponseDTO toQuestionResponseDTO(QuestionResponse questionResponse, String token) {
         List<QuestionItemDTO> questionItemDTOS = new ArrayList<>();
 
         for (QuestionItem questionItem : questionResponse.getResults()) {
             questionItemDTOS.add(toQuestionItemDTO(questionItem));
         }
 
-        return QuestionResponseDTO.builder().results(questionItemDTOS).build();
+        return QuestionResponseDTO.builder().results(questionItemDTOS).token(token).build();
     }
 
     private QuestionItemDTO toQuestionItemDTO(QuestionItem question) {

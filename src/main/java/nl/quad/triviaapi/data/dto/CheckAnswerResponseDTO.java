@@ -1,10 +1,14 @@
 package nl.quad.triviaapi.data.dto;
 
-import lombok.AllArgsConstructor;
+import java.util.List;
+
+import lombok.Builder;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
+@Builder
 public class CheckAnswerResponseDTO {
+    private String correctAnswer;
+    private List<String> inCorrectAnswers;
     private boolean isCorrect;
 }
